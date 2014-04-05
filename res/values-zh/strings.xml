@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <string name="app_name">关机Now</string>
+    <string name="btn_shutdown">关机</string>
+    <string name="btn_reboot">重启</string>
+    <string name="item_settime">设置时间</string>
+    <string name="title_sorry">很抱歉</string>
+    <string name="context_norooted">"你的Android设备还没有获取Root权限!"</string>
+
+</resources>

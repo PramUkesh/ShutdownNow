@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <string name="app_name">ShutdownNow</string>
+    <string name="btn_shutdown">Shutdown</string>
+    <string name="btn_reboot">Reboot</string>
+    <string name="item_settime">Set time</string>
+    <string name="title_sorry">Sorry!</string>
+    <string name="context_norooted">"Your machine hasn\'t got root permission and this application needs it."</string>
+
+</resources>
