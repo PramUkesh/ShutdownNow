@@ -30,6 +30,7 @@
                 <action android:name="android.intent.action.MAIN" />
             </intent-filter>
         </activity>
+        <receiver android:name="cn.fython.shutdown.ShutdownReceiver"></receiver>
     </application>
 
 </manifest>
