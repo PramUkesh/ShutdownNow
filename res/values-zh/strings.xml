@@ -4,8 +4,22 @@
     <string name="app_name">关机Now</string>
     <string name="btn_shutdown">关机</string>
     <string name="btn_reboot">重启</string>
+    <string name="btn_recovery">恢复模式</string>
     <string name="item_settime">设置时间</string>
+    <string name="item_deletetime">取消设置</string>
+    <string name="item_help">帮助</string>
+    <string name="title_help">帮助&amp;关于</string>
     <string name="title_sorry">很抱歉</string>
+    <string name="tips_selectmode">请选择关机模式</string>
+    <string name="tips_finishsetting">定时关机已启动，你可以点击删除图标取消</string>
+    <string name="tips_cancelsetting">定时关机已取消</string>
     <string name="context_norooted">"你的Android设备还没有获取Root权限!"</string>
-
+    <string name="context_help">关机Now!
+        \n设下敲响关机功能的定时器吧
+        \n点击时钟图标来设置时间，然后选择关机模式(关机/重启/恢复模式)
+        \n顺便一提，你可以按删除图标来取消定时。
+        \n
+        \n码农: Fython 烧饼 2014 (fython@163.com)
+        \nGithub 源码: http://github.com/fython/ShutdownNow</string>
+        
 </resources>
