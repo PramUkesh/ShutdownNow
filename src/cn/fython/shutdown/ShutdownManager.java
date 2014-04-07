@@ -21,6 +21,10 @@ public class ShutdownManager {
 	public final static int TIME_NONE = 0, TIME_ONTIME = 1, TIME_WHENMUSICSTOP = 2,
 			SHUTDOWN = 0, REBOOT = 1, RECOVERY = 2, SHUTDOWN_NOROOT = 3, REBOOT_NOROOT = 4;
 	
+	public static long getClock(){
+		return clockmiles;
+	}
+	
 	public static int getTime(){
 		return time;
 	}
@@ -88,21 +92,26 @@ public class ShutdownManager {
 		case SHUTDOWN:
 			i = ExecCommand.execRooted("reboot -p");
 			if (i == -1 | i == 1){
-				Log.v(TAG, "No rooted!");
-				return false;
+				Log.e(TAG, "Failed to run \"reboot -p\"");
+				Log.i(TAG, "Trying \"shutdown\"");
+				i = ExecCommand.execRooted("shutdown");
+				if (i == -1 | i == 1){
+					Log.e(TAG, "Failed to run \"shutdown\"");
+					return false;
+				}
 			}
 			return true;
 		case REBOOT:
 			i = ExecCommand.execRooted("reboot");
 			if (i == -1 | i == 1){
-				Log.v(TAG, "No rooted!");
+				Log.e(TAG, "Failed to run \"reboot\"");
 				return false;
 			}
 			return true;
 		case RECOVERY:
 			i = ExecCommand.execRooted("reboot recovery");
 			if (i == -1 | i == 1){
-				Log.v(TAG, "No rooted!");
+				Log.e(TAG, "Failed to run \"reboot recovery\"");
 				return false;
 			}
 			return true;
@@ -111,6 +120,8 @@ public class ShutdownManager {
 			intent.setAction(Intent.ACTION_SHUTDOWN);
 			intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
 			context.startActivity(intent);
+			return false;
+		case REBOOT_NOROOT:
 			return false;
 		}
 		return false;

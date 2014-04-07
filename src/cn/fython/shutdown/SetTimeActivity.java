@@ -28,9 +28,15 @@ public class SetTimeActivity extends ActionBarActivity {
 		ab.setDisplayShowHomeEnabled(false);
 		ab.setTitle(R.string.item_settime);
 		
+		String getData = getIntent().getStringExtra("targetTime");
+		
 		setContentView(R.layout.activity_settime);
 		
 		mTimePicker = (TimePicker) findViewById(R.id.timePicker);
+		if (getData != null){
+			mTimePicker.setCurrentHour(Integer.parseInt(getData.substring(0, 2)));
+			mTimePicker.setCurrentMinute(Integer.parseInt(getData.substring(3, 5)));
+		}
 	}
 	
 	@Override
@@ -56,6 +62,12 @@ public class SetTimeActivity extends ActionBarActivity {
 			
 			Intent intent = new Intent();
 			intent.putExtra("time", calendar.getTimeInMillis());
+			intent.putExtra("targetTime",
+					(mTimePicker.getCurrentHour().toString().length() == 1
+					? "0" + mTimePicker.getCurrentHour() : mTimePicker.getCurrentHour())
+					+ ":"
+					+ (mTimePicker.getCurrentMinute().toString().length() == 1
+					? "0" + mTimePicker.getCurrentMinute() : mTimePicker.getCurrentMinute()));
 			setResult(1, intent);
 			
 			finish();

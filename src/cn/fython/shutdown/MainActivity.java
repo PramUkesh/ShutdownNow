@@ -5,6 +5,7 @@ import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.DialogInterface.OnCancelListener;
 import android.content.Intent;
+import android.os.Build;
 import android.os.Bundle;
 import android.support.v4.view.MenuItemCompat;
 import android.support.v7.app.ActionBarActivity;
@@ -22,6 +23,8 @@ public class MainActivity extends ActionBarActivity {
 	
 	Button btn_shutdown, btn_reboot, btn_recovery;
 	AlertDialog dialogExit, dialogHelp;
+	
+	private static String targetTime;
 	
 	private final static String TAG = "MainActivity";
 	
@@ -49,7 +52,9 @@ public class MainActivity extends ActionBarActivity {
 					ShutdownManager.stop(getApplicationContext());
 					ShutdownManager.setMode(ShutdownManager.SHUTDOWN);
 					ShutdownManager.start(getApplicationContext());
-					MainActivity.this.getWindow().invalidatePanelMenu(Window.FEATURE_OPTIONS_PANEL);
+					if (Build.VERSION.SDK_INT >= 11){
+						MainActivity.this.getWindow().invalidatePanelMenu(Window.FEATURE_OPTIONS_PANEL);
+					}
 					Toast.makeText(getApplicationContext(), getString(R.string.tips_finishsetting), Toast.LENGTH_SHORT).show();
 					return;
 				}
@@ -69,7 +74,9 @@ public class MainActivity extends ActionBarActivity {
 					ShutdownManager.stop(getApplicationContext());
 					ShutdownManager.setMode(ShutdownManager.REBOOT);
 					ShutdownManager.start(getApplicationContext());
-					MainActivity.this.getWindow().invalidatePanelMenu(Window.FEATURE_OPTIONS_PANEL);
+					if (Build.VERSION.SDK_INT >= 11){
+						MainActivity.this.getWindow().invalidatePanelMenu(Window.FEATURE_OPTIONS_PANEL);
+					}
 					Toast.makeText(getApplicationContext(), getString(R.string.tips_finishsetting), Toast.LENGTH_SHORT).show();
 					return;
 				}
@@ -88,7 +95,9 @@ public class MainActivity extends ActionBarActivity {
 					ShutdownManager.stop(getApplicationContext());
 					ShutdownManager.setMode(ShutdownManager.RECOVERY);
 					ShutdownManager.start(getApplicationContext());
-					MainActivity.this.getWindow().invalidatePanelMenu(Window.FEATURE_OPTIONS_PANEL);
+					if (Build.VERSION.SDK_INT >= 11){
+						MainActivity.this.getWindow().invalidatePanelMenu(Window.FEATURE_OPTIONS_PANEL);
+					}
 					Toast.makeText(getApplicationContext(), getString(R.string.tips_finishsetting), Toast.LENGTH_SHORT).show();
 					return;
 				}
@@ -103,21 +112,35 @@ public class MainActivity extends ActionBarActivity {
 	@Override
 	public boolean onPrepareOptionsMenu(Menu menu) {
 		menu.clear();
-		if (ShutdownManager.getTime() == ShutdownManager.TIME_NONE){
-			MenuItemCompat.setShowAsAction(
-					menu.add(R.string.item_settime)
-					.setIcon(android.R.drawable.ic_menu_recent_history),
-					MenuItemCompat.SHOW_AS_ACTION_IF_ROOM);
+
+		if (Build.VERSION.SDK_INT >= 11){
+			if (ShutdownManager.getTime() == ShutdownManager.TIME_NONE | ShutdownManager.getClock() == 0){
+				MenuItemCompat.setShowAsAction(
+						menu.add(R.string.item_settime)
+						.setIcon(R.drawable.ic_menu_recent_history),
+						MenuItemCompat.SHOW_AS_ACTION_IF_ROOM);
+			} else {
+				MenuItemCompat.setShowAsAction(menu.add(targetTime), MenuItemCompat.SHOW_AS_ACTION_ALWAYS);
+				MenuItemCompat.setShowAsAction(
+						menu.add(R.string.item_deletetime)
+						.setIcon(R.drawable.ic_menu_delete),
+						MenuItemCompat.SHOW_AS_ACTION_IF_ROOM|MenuItemCompat.SHOW_AS_ACTION_WITH_TEXT);
+			}
 		} else {
 			MenuItemCompat.setShowAsAction(
-					menu.add(R.string.item_deletetime)
-					.setIcon(android.R.drawable.ic_menu_delete),
+					menu.add(R.string.item_settime)
+					.setIcon(R.drawable.ic_menu_recent_history),
 					MenuItemCompat.SHOW_AS_ACTION_IF_ROOM);
+			MenuItemCompat.setShowAsAction(menu.add(targetTime), MenuItemCompat.SHOW_AS_ACTION_ALWAYS);
+			MenuItemCompat.setShowAsAction(
+					menu.add(R.string.item_deletetime)
+					.setIcon(R.drawable.ic_menu_delete),
+					MenuItemCompat.SHOW_AS_ACTION_IF_ROOM|MenuItemCompat.SHOW_AS_ACTION_WITH_TEXT);
 		}
 		
 		MenuItemCompat.setShowAsAction(
 				menu.add(R.string.item_help)
-				.setIcon(android.R.drawable.ic_menu_help), 
+				.setIcon(R.drawable.ic_menu_help), 
 				MenuItemCompat.SHOW_AS_ACTION_ALWAYS);
 		
 		return super.onPrepareOptionsMenu(menu);
@@ -133,12 +156,20 @@ public class MainActivity extends ActionBarActivity {
 		if (menu.getTitle() == getString(R.string.item_deletetime)){
 			ShutdownManager.setTime(ShutdownManager.TIME_NONE);
 			ShutdownManager.stop(getApplicationContext());
-			MainActivity.this.getWindow().invalidatePanelMenu(Window.FEATURE_OPTIONS_PANEL);
+			if (Build.VERSION.SDK_INT >= 11){
+				MainActivity.this.getWindow().invalidatePanelMenu(Window.FEATURE_OPTIONS_PANEL);
+			}
 			Toast.makeText(getApplicationContext(), getString(R.string.tips_cancelsetting), Toast.LENGTH_SHORT).show();
 		}
 		
 		if (menu.getTitle() == getString(R.string.item_help)){
 			showHelpDialog();
+		}
+		
+		if (menu.getTitle() == targetTime){
+			Intent intent = new Intent(MainActivity.this, SetTimeActivity.class);
+			intent.putExtra("targetTime", targetTime);
+			startActivityForResult(intent, 0);
 		}
 		
 		return super.onOptionsItemSelected(menu);
@@ -151,7 +182,13 @@ public class MainActivity extends ActionBarActivity {
 		case 1:
 			ShutdownManager.setTime(ShutdownManager.TIME_ONTIME);
 			ShutdownManager.setClock(data.getLongExtra("time", 0));
-			MainActivity.this.getWindow().invalidatePanelMenu(Window.FEATURE_OPTIONS_PANEL);
+			if (ShutdownManager.isRunning){
+				ShutdownManager.start(getApplicationContext());
+			}
+			targetTime = data.getStringExtra("targetTime");
+			if (Build.VERSION.SDK_INT >= 11){
+				MainActivity.this.getWindow().invalidatePanelMenu(Window.FEATURE_OPTIONS_PANEL);
+			}
 			Toast.makeText(getApplicationContext(), getString(R.string.tips_selectmode), Toast.LENGTH_SHORT).show();
 			break;
 		}
