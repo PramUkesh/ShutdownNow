@@ -8,11 +8,15 @@
     <string name="item_settime">设置时间</string>
     <string name="item_deletetime">取消设置</string>
     <string name="item_help">帮助</string>
-    <string name="title_help">帮助&amp;关于</string>
+    <string name="title_help">帮助 &amp; 关于</string>
     <string name="title_sorry">很抱歉</string>
+    <string name="title_shutdown">确定关机?</string>
     <string name="tips_selectmode">请选择关机模式</string>
     <string name="tips_finishsetting">定时关机已启动，你可以点击删除图标取消</string>
     <string name="tips_cancelsetting">定时关机已取消</string>
+    <string name="tips_readytoshutdown">系统将于30秒后关机</string>
+    <string name="tips_readytoshutdown_short">准备关机!</string>
+    <string name="context_shutdownnow">系统将会马上关机,你的应用将不会自动保存.</string>
     <string name="context_norooted">"你的Android设备还没有获取Root权限!"</string>
     <string name="context_help">关机Now!
         \n设下敲响关机功能的定时器吧

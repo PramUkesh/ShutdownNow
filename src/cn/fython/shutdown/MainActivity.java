@@ -22,7 +22,7 @@ import android.widget.Toast;
 public class MainActivity extends ActionBarActivity {
 	
 	Button btn_shutdown, btn_reboot, btn_recovery;
-	AlertDialog dialogExit, dialogHelp;
+	AlertDialog dialogExit, dialogHelp, dialogShutdown;
 	
 	private static String targetTime;
 	
@@ -58,10 +58,7 @@ public class MainActivity extends ActionBarActivity {
 					Toast.makeText(getApplicationContext(), getString(R.string.tips_finishsetting), Toast.LENGTH_SHORT).show();
 					return;
 				}
-				if (!ShutdownManager.shutdown(getApplicationContext(), ShutdownManager.SHUTDOWN)){
-					showUnrootedDialog();
-					//ShutdownManager.shutdown(getApplicationContext(), ShutdownManager.SHUTDOWN_NOROOT);
-				}
+				showShutdownDialog(ShutdownManager.SHUTDOWN);
 			}
 			
 		});
@@ -80,9 +77,7 @@ public class MainActivity extends ActionBarActivity {
 					Toast.makeText(getApplicationContext(), getString(R.string.tips_finishsetting), Toast.LENGTH_SHORT).show();
 					return;
 				}
-				if (!ShutdownManager.shutdown(getApplicationContext(), ShutdownManager.REBOOT)){
-					showUnrootedDialog();
-				}
+				showShutdownDialog(ShutdownManager.REBOOT);
 			}
 			
 		});
@@ -101,9 +96,7 @@ public class MainActivity extends ActionBarActivity {
 					Toast.makeText(getApplicationContext(), getString(R.string.tips_finishsetting), Toast.LENGTH_SHORT).show();
 					return;
 				}
-				if (!ShutdownManager.shutdown(getApplicationContext(), ShutdownManager.RECOVERY)){
-					showUnrootedDialog();
-				}
+				showShutdownDialog(ShutdownManager.RECOVERY);
 			}
 			
 		});
@@ -233,7 +226,33 @@ public class MainActivity extends ActionBarActivity {
 		dialogHelp = new AlertDialog.Builder(this)
 		.setTitle(getString(R.string.title_help))
 		.setMessage(getString(R.string.context_help))
-		.setPositiveButton(android.R.string.ok, listener).show();
+		.setPositiveButton(android.R.string.ok, listener)
+		.show();
+	}
+	
+	private void showShutdownDialog(final int what){
+		DialogInterface.OnClickListener listener = new DialogInterface.OnClickListener() {
+			@Override
+			public void onClick(DialogInterface dialog, int whichButton) {
+				switch (whichButton){
+				case DialogInterface.BUTTON_POSITIVE:
+					if (!ShutdownManager.shutdown(getApplicationContext(), what)){
+						showUnrootedDialog();
+					}
+					break;
+				case DialogInterface.BUTTON_NEGATIVE:
+					dialogHelp.dismiss();
+					break;
+				}
+			}
+		};
+		
+		dialogHelp = new AlertDialog.Builder(this)
+		.setTitle(getString(R.string.title_shutdown))
+		.setMessage(getString(R.string.context_shutdownnow))
+		.setPositiveButton(android.R.string.ok, listener)
+		.setNegativeButton(android.R.string.no, listener)
+		.show();
 	}
 	
 }

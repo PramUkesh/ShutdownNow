@@ -14,7 +14,7 @@ public class ShutdownManager {
 	public static boolean isRunning = false;
 	
 	private static AlarmManager am;
-	private static PendingIntent pendingIntent;
+	private static PendingIntent pendingIntent, pi1;
 
 	private final static String TAG = "ShutdownManager";
 	
@@ -45,6 +45,22 @@ public class ShutdownManager {
 		mode = target;
 	}
 	
+	public static void startCountdown(Context context, long time, int mode){
+		if (am == null){
+			am = (AlarmManager) context.getSystemService(Context.ALARM_SERVICE);
+		}
+		Intent intent = new Intent(context, CountdownReceiver.class);
+		intent.putExtra("mode", mode);
+		pi1 = PendingIntent.getBroadcast(context, 0, intent, 0);
+		am.set(AlarmManager.RTC_WAKEUP, time, pi1);
+	}
+	
+	public static void stopCountdown(Context context){
+		if (pi1 != null){
+			am.cancel(pi1);
+		}
+	}
+	
 	public static void start(Context context){
 		Log.i(TAG, "œÏ”¶ShutdownManager…Ë÷√");
 		Log.i(TAG, "time=" + time + ", mode=" + mode + ", clockmiles=" + clockmiles);
@@ -55,7 +71,7 @@ public class ShutdownManager {
 		case TIME_ONTIME:
 			Intent intent = new Intent(context, ShutdownReceiver.class);
 			intent.putExtra("mode", mode);
-			
+			intent.putExtra("time", clockmiles + 30000);
 			if (pendingIntent == null){
 				pendingIntent = PendingIntent.getBroadcast(context, 0, intent, 0);
 			}
