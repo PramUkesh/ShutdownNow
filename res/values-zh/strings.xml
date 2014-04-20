@@ -8,6 +8,7 @@
     <string name="item_settime">设置时间</string>
     <string name="item_deletetime">取消设置</string>
     <string name="item_help">帮助</string>
+    <string name="item_launchnow">马上执行</string>
     <string name="title_help">帮助 &amp; 关于</string>
     <string name="title_sorry">很抱歉</string>
     <string name="title_shutdown">确定关机?</string>

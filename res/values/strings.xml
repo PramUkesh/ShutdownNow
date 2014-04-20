@@ -8,6 +8,7 @@
     <string name="item_settime">Set time</string>
     <string name="item_deletetime">Cancel</string>
     <string name="item_help">Help</string>
+    <string name="item_launchnow">Launch</string>
     <string name="title_help">Help &amp; About</string>
     <string name="title_sorry">Sorry!</string>
     <string name="title_shutdown">Shutdown?</string>
@@ -16,6 +17,7 @@
     <string name="tips_cancelsetting">Canceled shutdown!</string>
     <string name="tips_readytoshutdown">System will shutdown in 30 seconds.</string>
     <string name="tips_readytoshutdown_short">Ready to shutdown!</string>
+    <string name="tips_clicktocancel">Click to cancel shutdown.</string>
     <string name="context_shutdownnow">System will shutdown at once without saving your work.</string>
     <string name="context_norooted">"Your machine hasn\'t got root permission and this application needs it."</string>
     <string name="context_help">ShutdownNow!

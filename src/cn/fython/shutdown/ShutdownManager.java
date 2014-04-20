@@ -56,9 +56,12 @@ public class ShutdownManager {
 	}
 	
 	public static void stopCountdown(Context context){
-		if (pi1 != null){
-			am.cancel(pi1);
-		}
+		Log.i(TAG, "cancel countdown");
+		MyNotification.cancel(context);
+		Intent intent = new Intent(context, CountdownReceiver.class);
+		intent.putExtra("mode", mode);
+		pi1 = PendingIntent.getBroadcast(context, 0, intent, 0);
+		am.cancel(pi1);
 	}
 	
 	public static void start(Context context){
@@ -70,6 +73,7 @@ public class ShutdownManager {
 			break;
 		case TIME_ONTIME:
 			Intent intent = new Intent(context, ShutdownReceiver.class);
+			intent.setAction("start");
 			intent.putExtra("mode", mode);
 			intent.putExtra("time", clockmiles + 30000);
 			if (pendingIntent == null){
@@ -104,6 +108,7 @@ public class ShutdownManager {
 	
 	public static boolean shutdown(Context context){
 		int i;
+		Log.i(TAG, "Start shutdown mode = " + mode);
 		switch (mode){
 		case SHUTDOWN:
 			i = ExecCommand.execRooted("reboot -p");
