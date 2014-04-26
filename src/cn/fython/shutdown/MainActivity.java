@@ -31,6 +31,12 @@ public class MainActivity extends ActionBarActivity {
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
+		
+		if (getIntent().getAction() == "launch"){
+			ShutdownManager.shutdown(getApplicationContext(), getIntent().getIntExtra("mode", 0));
+			finish();
+		}
+		
 		setContentView(R.layout.activity_main);
 		
 		ShutdownManager.readConfig(getApplicationContext());
